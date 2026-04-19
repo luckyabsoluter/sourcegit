@@ -113,16 +113,32 @@ jobs:
     name: Package Termux
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout sources
+        uses: actions/checkout@v6
+      - name: Install package dependencies
+        run: |
+          export DEBIAN_FRONTEND=noninteractive
+          ln -fs /usr/share/zoneinfo/Etc/UTC /etc/localtime
+          sudo apt-get update
+          sudo apt-get install -y dpkg-dev fakeroot
       - name: Download build
         uses: actions/download-artifact@v8
         with:
           name: sourcegit.termux-arm64
           path: build
+      - name: Package
+        env:
+          VERSION: ${{ inputs.version }}
+          RUNTIME: termux-arm64
+        run: |
+          mkdir build/SourceGit
+          tar -xf "build/sourcegit.termux-arm64.tar" -C build/SourceGit
+          ./build/scripts/package.termux.sh
       - name: Upload package artifact
         uses: actions/upload-artifact@v7
         with:
           name: package.termux-arm64
-          path: build/sourcegit.termux-arm64.tar
+          path: build/sourcegit_*.deb
       - name: Delete temp artifacts
         uses: geekyeggo/delete-artifact@v6
         with:
