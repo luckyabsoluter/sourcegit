@@ -1,7 +1,7 @@
 name: Continuous Integration
 on:
   push:
-    branches: [develop]
+    branches: [develop, termux]
   pull_request:
     branches: [develop]
   workflow_dispatch:
