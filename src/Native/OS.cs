@@ -126,7 +126,7 @@ namespace SourceGit.Native
             else if (OperatingSystem.IsMacOS())
                 _backend = new MacOS();
             else if (OperatingSystem.IsLinux())
-                _backend = new Linux();
+                _backend = IsTermux() ? new Termux() : new Linux();
             else
                 throw new PlatformNotSupportedException();
         }
@@ -296,6 +296,19 @@ namespace SourceGit.Native
 
         [GeneratedRegex(@"^git version[\s\w]*(\d+)\.(\d+)[\.\-](\d+).*$")]
         private static partial Regex REG_GIT_VERSION();
+
+        private static bool IsTermux()
+        {
+            var termuxVersion = Environment.GetEnvironmentVariable("TERMUX_VERSION");
+            if (!string.IsNullOrEmpty(termuxVersion))
+                return true;
+
+            var prefix = Environment.GetEnvironmentVariable("PREFIX");
+            if (!string.IsNullOrEmpty(prefix) && prefix.Contains("/data/data/com.termux/", StringComparison.Ordinal))
+                return true;
+
+            return Directory.Exists("/data/data/com.termux/files/usr");
+        }
 
         private static IBackend _backend = null;
         private static string _gitExecutable = string.Empty;

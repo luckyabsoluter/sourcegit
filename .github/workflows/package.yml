@@ -109,3 +109,21 @@ jobs:
         uses: geekyeggo/delete-artifact@v6
         with:
           name: sourcegit.${{ matrix.runtime }}
+  termux:
+    name: Package Termux
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download build
+        uses: actions/download-artifact@v8
+        with:
+          name: sourcegit.termux-arm64
+          path: build
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: package.termux-arm64
+          path: build/sourcegit.termux-arm64.tar
+      - name: Delete temp artifacts
+        uses: geekyeggo/delete-artifact@v6
+        with:
+          name: sourcegit.termux-arm64

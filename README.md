@@ -76,6 +76,7 @@ This software creates a folder, which is platform-dependent, to store user setti
 |---------|-------------------------------------------|
 | Windows | `%APPDATA%\SourceGit`                     |
 | Linux   | `~/.sourcegit`                            |
+| Termux  | `~/.sourcegit`                            |
 | macOS   | `~/Library/Application Support/SourceGit` |
 
 > [!TIP]
@@ -143,6 +144,12 @@ For **Linux** users:
 * Make sure [git-credential-manager](https://github.com/git-ecosystem/git-credential-manager/releases) or [git-credential-libsecret](https://pkgs.org/search/?q=git-credential-libsecret) is installed on your Linux.
 * Maybe you need to set environment variable `AVALONIA_SCREEN_SCALE_FACTORS`. See https://github.com/AvaloniaUI/Avalonia/wiki/Configuring-X11-per-monitor-DPI.
 * If you can NOT type accented characters, such as `ê`, `ó`, try to set the environment variable `AVALONIA_IM_MODULE` to `none`.
+
+For **Termux** users (experimental):
+
+* SourceGit is a desktop Avalonia app. Running it on Android requires an X11 server (for example, `termux-x11` or a remote X server).
+* If you plan to run Linux ARM64 builds inside Termux, use a glibc-based userland (for example, `proot-distro`) with .NET 10 SDK and git installed.
+* Installing Termux:API enables `termux-open`/`termux-open-url` for opening files and URLs.
 
 ## Commandline arguments
 

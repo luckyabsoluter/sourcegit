@@ -26,6 +26,7 @@ jobs:
             os: ubuntu-latest
             runtime: linux-arm64
             container: ubuntu:20.04
+            termux: true
     name: Build ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
     container: ${{ matrix.container || '' }}
@@ -79,3 +80,14 @@ jobs:
         with:
           name: sourcegit.${{ matrix.runtime }}
           path: publish/*
+      - name: Prepare Termux artifact
+        if: matrix.termux == true
+        run: |
+          mkdir -p termux
+          cp "publish/sourcegit.${{ matrix.runtime }}.tar" "termux/sourcegit.termux-arm64.tar"
+      - name: Upload Termux artifact
+        if: matrix.termux == true
+        uses: actions/upload-artifact@v7
+        with:
+          name: sourcegit.termux-arm64
+          path: termux/sourcegit.termux-arm64.tar
